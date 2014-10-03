@@ -1,8 +1,11 @@
 package org.pan.simple.controller;
 
+import antlr.StringUtils;
+import org.pan.simple.util.ValidateUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,19 +17,37 @@ import javax.servlet.http.HttpServletRequest;
 public class AdminController {
 
     @RequestMapping("/adminLoginPage")
-    public String adminLoginPage(){
-        return "adminLoginPage";
-    }
-
-    @RequestMapping("/adminLogin")
-    public String adminLogin(HttpServletRequest request,Model model){
+    public String adminLoginPage(HttpServletRequest request){
         String kaptchaExpected = (String)request.getSession() .getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
-        String kaptchaReceived = request.getParameter("kaptcha");
-        if (kaptchaReceived == null || !kaptchaReceived.equalsIgnoreCase(kaptchaExpected)){
-            model.addAttribute("error","验证码错误");
+        String kaptcha = request.getParameter("kaptcha");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        if(!ValidateUtil.isNotNullOrEmpty(kaptcha) && !ValidateUtil.isNotNullOrEmpty(username) && !ValidateUtil.isNotNullOrEmpty(password) ){
             return "adminLoginPage";
         }
+
+        request.setAttribute("username",username);
+        request.setAttribute("password",password);
+
+        if (kaptcha == null || !kaptcha.equalsIgnoreCase(kaptchaExpected)){
+            request.setAttribute("error","验证码错误");
+            return "adminLoginPage";
+        }
+
+        if(username.equals("pan") && password.equals("123456")){
+            request.removeAttribute("username");
+            request.removeAttribute("password");
+            request.removeAttribute("error");
+            return "redirect:adminManagePage.do";
+        }
+
+        request.setAttribute("error","验证失败，请仔细检查用户名与密码");
         return "adminLoginPage";
     }
 
+    @RequestMapping("/adminManagePage")
+    public String adminManagePage(){
+        return "adminManagePage";
+    }
 }
