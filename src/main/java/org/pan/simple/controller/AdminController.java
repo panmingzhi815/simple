@@ -1,11 +1,8 @@
 package org.pan.simple.controller;
 
-import antlr.StringUtils;
 import org.pan.simple.util.ValidateUtil;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,7 +15,6 @@ public class AdminController {
 
     @RequestMapping("/adminLoginPage")
     public String adminLoginPage(HttpServletRequest request){
-        String kaptchaExpected = (String)request.getSession() .getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
         String kaptcha = request.getParameter("kaptcha");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -30,6 +26,7 @@ public class AdminController {
         request.setAttribute("username",username);
         request.setAttribute("password",password);
 
+        String kaptchaExpected = (String)request.getSession() .getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
         if (kaptcha == null || !kaptcha.equalsIgnoreCase(kaptchaExpected)){
             request.setAttribute("error","验证码错误");
             return "adminLoginPage";

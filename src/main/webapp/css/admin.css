@@ -1,6 +1,5 @@
 .form{
     font-size: 15px;
-    border-top: 1px solid #aac5e7;
     padding: 10 0 0 0;
     text-align: center;
 }
@@ -20,4 +19,16 @@
     width: 150px;
     margin-right: 2%;
     margin-left: 2%;
+}
+
+.logoTable{
+    height: 100%;
+    width: 100%;
+    padding: 0 10;
+}
+
+.logoTitle{
+    font-size: 40px;
+    font-family: Arial;
+    color: #0070a9;
 }
